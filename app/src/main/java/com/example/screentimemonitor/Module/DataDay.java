@@ -1,0 +1,35 @@
+package com.example.screentimemonitor.Module;
+
+import java.util.Map;
+
+public class DataDay {
+
+    String date;
+    Map<String, Long> appUsageByNames;
+
+    public DataDay() {
+    }
+
+    public DataDay(String date, Map<String, Long> appUsageByNames) {
+        this.date = date;
+        this.appUsageByNames = appUsageByNames;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public DataDay setDate(String date) {
+        this.date = date;
+        return this;
+    }
+
+    public Map<String, Long> getAppUsageByNames() {
+        return appUsageByNames;
+    }
+
+    public DataDay setAppUsageByNames(Map<String, Long> appUsageByNames) {
+        this.appUsageByNames = appUsageByNames;
+        return this;
+    }
+}
