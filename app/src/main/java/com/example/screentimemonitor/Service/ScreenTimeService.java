@@ -1,4 +1,4 @@
-package com.example.screentimemonitor;
+package com.example.screentimemonitor.Service;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -8,6 +8,7 @@ import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -17,7 +18,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.example.screentimemonitor.Module.DataDay;
-import com.example.screentimemonitor.SharedPreferencesManager;
+import com.example.screentimemonitor.R;
+import com.example.screentimemonitor.Utilities.SharedPreferencesManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,7 +29,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
 public class ScreenTimeService extends Service {
 
@@ -46,7 +47,7 @@ public class ScreenTimeService extends Service {
             @Override
             public void run() {
                 collectAndSaveUsageData();
-                handler.postDelayed(this, 60000); // Run every minute
+                handler.postDelayed(this, 600000); // Run every 10 minute
             }
         };
         handler.post(runnable);
@@ -64,13 +65,24 @@ public class ScreenTimeService extends Service {
 
     @Override
     public void onDestroy() {
-        handler.removeCallbacks(runnable);
         super.onDestroy();
         Log.d(TAG, "Service destroyed");
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction("restartservice");
+        broadcastIntent.setClass(this, RestartServiceReceiver.class);
+        this.sendBroadcast(broadcastIntent);
     }
+
 
     private void collectAndSaveUsageData() {
         String currentDate = getCurrentDate();
+        SharedPreferencesManager spManager = SharedPreferencesManager.getInstance();
+
+        if (!currentDate.equals(spManager.getLastCheckedDate())) {
+            spManager.setNotificationSent(false);
+            spManager.setLastCheckedDate(currentDate);
+        }
+
 
         UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
         if (usageStatsManager == null) {
@@ -99,9 +111,15 @@ public class ScreenTimeService extends Service {
                 }
             }
         }
+        long totalUsageTime = 0;
+        for (long usageTime : usageMap.values()) {
+            totalUsageTime += usageTime;
+        }
 
         // Filter out apps with zero usage time
         usageMap.entrySet().removeIf(entry -> entry.getValue() <= 0);
+
+        checkUsageTimeLimit(totalUsageTime);
 
         updateDataDays(currentDate, usageMap);
         Log.d(TAG, "Data collected and saved for date: " + currentDate);
@@ -186,6 +204,32 @@ public class ScreenTimeService extends Service {
                 .setContentText("Monitoring app usage...")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .build();
+    }
+
+    private void checkUsageTimeLimit(long totalUsageTime) {
+        SharedPreferencesManager spManager = SharedPreferencesManager.getInstance();
+        int usageTimeLimit = spManager.getUsageTimeLimit(); // Assuming you have a method to get the usage time limit
+        Log.d(TAG, "THE ANSWER IS : " + totalUsageTime+">????"+usageTimeLimit);
+        if (totalUsageTime > usageTimeLimit * 60 * 1000) { // Convert limit from minutes to milliseconds
+            sendTimeLimitExceededNotification();
+        }
+    }
+
+    private void sendTimeLimitExceededNotification() {
+        SharedPreferencesManager spManager = SharedPreferencesManager.getInstance();
+        if (!spManager.isNotificationSent()) {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setContentTitle("Time Limit Exceeded")
+                    .setContentText("You have exceeded your daily usage time limit.")
+                    .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if (notificationManager != null) {
+                notificationManager.notify(3, builder.build());
+                spManager.setNotificationSent(true);
+            }
+        }
     }
 
     @Nullable

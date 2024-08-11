@@ -7,16 +7,81 @@
     tools:context=".ui.NotificationsFragment">
 
     <TextView
-        android:id="@+id/text_notifications"
-        android:layout_width="match_parent"
+        android:id="@+id/text_time_limit_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:text="Set Daily Usage Time Limit"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_current_limit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Current Limit: 0h 0m"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_time_limit_title" />
+
+    <TextView
+        android:id="@+id/text_hours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Hours"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_hours"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_current_limit" />
+
+    <EditText
+        android:id="@+id/edit_text_hours"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="0"
+        app:layout_constraintEnd_toStartOf="@+id/text_minutes"
+        app:layout_constraintStart_toEndOf="@id/text_hours"
+        app:layout_constraintTop_toBottomOf="@id/text_current_limit"
+        app:layout_constraintWidth_percent="0.3" />
+
+    <TextView
+        android:id="@+id/text_minutes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Minutes"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_minutes"
+        app:layout_constraintStart_toEndOf="@id/edit_text_hours"
+        app:layout_constraintTop_toBottomOf="@id/text_current_limit" />
+
+    <EditText
+        android:id="@+id/edit_text_minutes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/text_minutes"
+        app:layout_constraintTop_toBottomOf="@id/text_current_limit"
+        app:layout_constraintWidth_percent="0.3" />
+
+    <Button
+        android:id="@+id/button_set_time_limit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Set Time Limit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_text_minutes" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

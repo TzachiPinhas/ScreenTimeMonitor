@@ -19,10 +19,6 @@ public class DataDay {
         return date;
     }
 
-    public DataDay setDate(String date) {
-        this.date = date;
-        return this;
-    }
 
     public Map<String, Long> getAppUsageByNames() {
         return appUsageByNames;

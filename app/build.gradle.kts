@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+
 }
 
 android {
@@ -48,5 +49,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     implementation ("com.google.code.gson:gson:2.10.1")
+    implementation (libs.mpandroidchart)
+
 
 }

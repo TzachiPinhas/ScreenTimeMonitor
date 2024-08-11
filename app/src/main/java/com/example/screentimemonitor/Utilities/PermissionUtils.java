@@ -1,4 +1,4 @@
-package com.example.screentimemonitor;
+package com.example.screentimemonitor.Utilities;
 
 import android.app.AppOpsManager;
 import android.content.Context;
