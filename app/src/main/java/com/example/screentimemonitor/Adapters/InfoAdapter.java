@@ -96,10 +96,16 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
         long hours = TimeUnit.MILLISECONDS.toHours(usageTime);
         long minutes = TimeUnit.MILLISECONDS.toMinutes(usageTime) % 60;
 
-        if (hours > 0) {
-            return hours + " hour" + (hours > 1 ? "s" : "") + (minutes > 0 ? " and " + minutes + " min" + (minutes > 1 ? "s" : "") : "");
+        String hoursText = hours > 0 ? context.getString(R.string.hours_format, hours) : "";
+        String minutesText = minutes > 0 ? context.getString(R.string.minutes_format, minutes) : "";
+
+        if (hours > 0 && minutes > 0) {
+            return hoursText + " " + context.getString(R.string.and) + " " + minutesText;
+        } else if (hours > 0) {
+            return hoursText;
         } else {
-            return minutes + " min" + (minutes > 1 ? "s" : "");
+            return minutesText;
         }
     }
+
 }

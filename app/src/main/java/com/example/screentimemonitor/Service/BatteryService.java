@@ -39,8 +39,8 @@ public class BatteryService extends Service {
             @Override
             public void run() {
                 collectBatteryData();
+                handler.postDelayed(this, 60000); // Run every 10 minutes
                 Log.d(TAG, "Battery data collected");
-                handler.postDelayed(this, 20000); // Run every 10 minutes
             }
         };
         handler.post(runnable);
@@ -97,9 +97,9 @@ public class BatteryService extends Service {
 
     private Notification getNotification() {
         return new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Battery Service")
-                .setContentText("Monitoring battery usage...")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle(getString(R.string.battery_service_title))
+                .setContentText(getString(R.string.battery_service_text))
+                .setSmallIcon(R.drawable.icon)
                 .build();
     }
 

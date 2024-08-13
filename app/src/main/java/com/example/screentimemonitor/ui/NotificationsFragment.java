@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.screentimemonitor.R;
 import com.example.screentimemonitor.Utilities.SharedPreferencesManager;
 import com.example.screentimemonitor.databinding.FragmentNotificationsBinding;
 
@@ -36,7 +37,7 @@ public class NotificationsFragment extends Fragment {
 
         buttonSetTimeLimit.setOnClickListener(v -> {
             if (editTextHours.getText().toString().isEmpty() || editTextMinutes.getText().toString().isEmpty()) {
-                Toast.makeText(getContext(), "Please enter both hours and minutes.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.enter_hours_and_minutes, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -45,14 +46,14 @@ public class NotificationsFragment extends Fragment {
             int totalTimeLimit = (hours * 60) + minutes;
 
             if (hours > 24 || minutes > 59) {
-                Toast.makeText(getContext(), "Please enter a valid time (hours <= 24 and minutes <= 59).", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.enter_valid_time, Toast.LENGTH_SHORT).show();
                 return;
             }
 
             spManager.saveUsageTimeLimit(totalTimeLimit);
             spManager.setNotificationSent(false); // Reset notification flag
 
-            Toast.makeText(getContext(), "Time limit updated successfully.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.time_limit_updated, Toast.LENGTH_SHORT).show();
             displayCurrentLimit(spManager);
 
             // Hide keyboard
@@ -67,7 +68,7 @@ public class NotificationsFragment extends Fragment {
         int totalTimeLimit = spManager.getUsageTimeLimit(); // Get the usage time limit
         int hours = totalTimeLimit / 60;
         int minutes = totalTimeLimit % 60;
-        textCurrentLimit.setText("Current Limit: " + hours + "h " + minutes + "m");
+        textCurrentLimit.setText(getString(R.string.current_limit, hours, minutes));
         editTextHours.setText(String.valueOf(hours));
         editTextMinutes.setText(String.valueOf(minutes));
     }

@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(infoAdapter);
 
         long avgUsageTime = totalUsageTime / daysCount;
-        textAvgTime.setText("Average Screen Time: " + formatUsageTime(avgUsageTime));
+        textAvgTime.setText(getString(R.string.average_screen_time2, formatUsageTime(avgUsageTime)));
     }
 
 
@@ -124,10 +124,15 @@ public class HomeFragment extends Fragment {
         long hours = TimeUnit.MILLISECONDS.toHours(usageTime);
         long minutes = TimeUnit.MILLISECONDS.toMinutes(usageTime) % 60;
 
-        if (hours > 0) {
-            return hours + " h" + (hours > 1 ? "s" : "") + (minutes > 0 ? " and " + minutes + " min" + (minutes > 1 ? "s" : "") : "");
+        String hoursText = hours > 0 ? getString(R.string.hours_format, hours) : "";
+        String minutesText = minutes > 0 ? getString(R.string.minutes_format, minutes) : "";
+
+        if (hours > 0 && minutes > 0) {
+            return hoursText + " " + getString(R.string.and) + " " + minutesText;
+        } else if (hours > 0) {
+            return hoursText;
         } else {
-            return minutes + " min" + (minutes > 1 ? "s" : "");
+            return minutesText;
         }
     }
 

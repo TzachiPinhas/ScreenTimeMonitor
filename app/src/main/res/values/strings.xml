@@ -3,4 +3,32 @@
     <string name="title_home">Home</string>
     <string name="title_battery">Battery</string>
     <string name="title_notifications">Notifications</string>
+    <string name="battery_tracking">Battery Tracking</string>
+    <string name="battery_level">Battery Level</string>
+    <string name="screen_time_monitor">Screen Time Monitor</string>
+    <string name="last_24_hours">24h</string>
+    <string name="last_7_days">7 days</string>
+    <string name="last_30_days">30 days</string>
+    <string name="average_screen_time">Average Screen Time: 0h 0m</string>
+    <string name="set_daily_usage_time_limit">Set Daily Usage Time Limit</string>
+    <string name="hours">Hours</string>
+    <string name="minutes">Minutes</string>
+    <string name="set_time_limit">Set Time Limit</string>
+    <string name="battery_level2">Battery Level: %1$d%%</string>
+    <string name="bar_chart_label">Battery Level</string>
+    <string name="average_screen_time2">Average Screen Time: %1$s</string>
+    <string name="and">and</string>
+    <string name="enter_hours_and_minutes">Please enter both hours and minutes.</string>
+    <string name="enter_valid_time">Please enter a valid time</string>
+    <string name="time_limit_updated">Time limit updated successfully.</string>
+    <string name="current_limit">Current Limit: %1$dh %2$dm</string>
+    <string name="time_limit_exceeded_title">Time Limit Exceeded</string>
+    <string name="time_limit_exceeded_text">You have exceeded your daily usage time limit.</string>
+    <string name="notification_title">Screen Time Service</string>
+    <string name="notification_text">Monitoring app usage...</string>
+    <string name="battery_service_title">Battery Service</string>
+    <string name="battery_service_text">Monitoring battery usage...</string>
+    <string name="hours_format">%dh</string>
+    <string name="minutes_format">%dm</string>
+
 </resources>

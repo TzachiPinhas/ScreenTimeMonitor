@@ -92,7 +92,7 @@ public class BatteryFragment extends Fragment {
                 int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
                 int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
                 int batteryPct = (int) (level / (float) scale * 100);
-                binding.batteryLevel.setText("Battery Level: " + batteryPct + "%");
+                binding.batteryLevel.setText(getString(R.string.battery_level2, batteryPct));
             }
         }
     }
@@ -111,7 +111,7 @@ public class BatteryFragment extends Fragment {
             index++;
         }
 
-        BarDataSet barDataSet = new BarDataSet(barEntries, "Battery Level");
+        BarDataSet barDataSet = new BarDataSet(barEntries, getString(R.string.bar_chart_label));
         List<Integer> colors = new ArrayList<>();
         for (BarEntry entry : barEntries) {
             if (entry.getY() < 50) {

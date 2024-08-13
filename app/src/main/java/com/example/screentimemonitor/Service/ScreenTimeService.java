@@ -48,6 +48,7 @@ public class ScreenTimeService extends Service {
             public void run() {
                 collectAndSaveUsageData();
                 handler.postDelayed(this, 600000); // Run every 10 minute
+                Log.d(TAG, "Data collected and saved");
             }
         };
         handler.post(runnable);
@@ -86,7 +87,6 @@ public class ScreenTimeService extends Service {
 
         UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
         if (usageStatsManager == null) {
-            Log.e(TAG, "UsageStatsManager is null");
             return;
         }
 
@@ -122,8 +122,6 @@ public class ScreenTimeService extends Service {
         checkUsageTimeLimit(totalUsageTime);
 
         updateDataDays(currentDate, usageMap);
-        Log.d(TAG, "Data collected and saved for date: " + currentDate);
-        printCurrentDayData(); // Print the current day's data for debugging
     }
 
     private long getStartOfDayInMillis() {
@@ -163,28 +161,6 @@ public class ScreenTimeService extends Service {
         spManager.putDataDayList(new ArrayList<>(dataDays)); // Save the updated list back to SharedPreferences
     }
 
-    private void printCurrentDayData() {
-        SharedPreferencesManager spManager = SharedPreferencesManager.getInstance();
-        List<DataDay> dataDays = spManager.getDataDayList();
-
-        if (dataDays.isEmpty()) {
-            Log.d(TAG, "No data available");
-            return;
-        }
-
-        DataDay today = dataDays.get(dataDays.size() - 1); // Get the latest day
-        Map<String, Long> appUsageByNames = today.getAppUsageByNames();
-
-        StringBuilder screenTimeData = new StringBuilder("Current day's data:\n");
-
-        for (Map.Entry<String, Long> entry : appUsageByNames.entrySet()) {
-            String packageName = entry.getKey();
-            long usageTime = entry.getValue();
-            screenTimeData.append(packageName).append(": ").append(usageTime).append(" ms\n");
-        }
-
-        Log.d(TAG, screenTimeData.toString());
-    }
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -200,16 +176,16 @@ public class ScreenTimeService extends Service {
 
     private Notification getNotification() {
         return new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Screen Time Service")
-                .setContentText("Monitoring app usage...")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle(getString(R.string.notification_title))
+                .setContentText(getString(R.string.notification_text))
+                .setSmallIcon(R.drawable.icon)
                 .build();
     }
+
 
     private void checkUsageTimeLimit(long totalUsageTime) {
         SharedPreferencesManager spManager = SharedPreferencesManager.getInstance();
         int usageTimeLimit = spManager.getUsageTimeLimit(); // Assuming you have a method to get the usage time limit
-        Log.d(TAG, "THE ANSWER IS : " + totalUsageTime+">????"+usageTimeLimit);
         if (totalUsageTime > usageTimeLimit * 60 * 1000) { // Convert limit from minutes to milliseconds
             sendTimeLimitExceededNotification();
         }
@@ -219,9 +195,9 @@ public class ScreenTimeService extends Service {
         SharedPreferencesManager spManager = SharedPreferencesManager.getInstance();
         if (!spManager.isNotificationSent()) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentTitle("Time Limit Exceeded")
-                    .setContentText("You have exceeded your daily usage time limit.")
+                    .setSmallIcon(R.drawable.icon)
+                    .setContentTitle(getString(R.string.time_limit_exceeded_title))
+                    .setContentText(getString(R.string.time_limit_exceeded_text))
                     .setPriority(NotificationCompat.PRIORITY_HIGH);
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -231,6 +207,7 @@ public class ScreenTimeService extends Service {
             }
         }
     }
+
 
     @Nullable
     @Override

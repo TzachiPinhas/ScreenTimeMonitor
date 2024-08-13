@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ScreenTimeMonitor</string>
+    <string name="title_home">בית</string>
+    <string name="title_battery">סוללה</string>
+    <string name="title_notifications">הודעות</string>
+    <string name="battery_tracking">מעקב סוללה</string>
+    <string name="battery_level">רמת סוללה</string>
+    <string name="screen_time_monitor">ניטור זמן מסך</string>
+    <string name="last_24_hours">24 שעות</string>
+    <string name="last_7_days">7 ימים</string>
+    <string name="last_30_days">30 ימים</string>
+    <string name="average_screen_time">זמן מסך ממוצע: 0ש 0ד</string>
+    <string name="set_daily_usage_time_limit">הגדר מגבלת זמן יומית</string>
+    <string name="hours">שעות</string>
+    <string name="minutes">דקות</string>
+    <string name="set_time_limit">הגדר מגבלת זמן</string>
+    <string name="battery_level2">רמת סוללה: %1$d%%</string>
+    <string name="bar_chart_label">רמת סוללה</string>
+    <string name="average_screen_time2">זמן מסך ממוצע: %1$s</string>
+    <string name="and">ו</string>
+    <string name="enter_hours_and_minutes">נא להזין שעות ודקות.</string>
+    <string name="enter_valid_time">נא להזין זמן תקין</string>
+    <string name="time_limit_updated">מגבלת הזמן עודכנה בהצלחה.</string>
+    <string name="current_limit">מגבלה נוכחית: %1$d שעות %2$d דקות</string>
+    <string name="time_limit_exceeded_title">חריגת מגבלת זמן</string>
+    <string name="time_limit_exceeded_text">חרגת ממגבלת זמן השימוש היומית שלך.</string>
+    <string name="notification_title">שירות ניטור זמן מסך</string>
+    <string name="notification_text">מנטר שימוש באפליקציות...</string>
+    <string name="battery_service_title">שירות סוללה</string>
+    <string name="battery_service_text">מנטר שימוש בסוללה...</string>
+    <string name="hours_format">%d ש</string>
+    <string name="minutes_format">%d ד</string>
+</resources>
