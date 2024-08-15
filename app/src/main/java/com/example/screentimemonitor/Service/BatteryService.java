@@ -29,7 +29,7 @@ public class BatteryService extends Service {
     private Runnable runnable;
 
     @Override
-    public void onCreate() {
+    public void onCreate() { // Start the service and collect battery data every 10 minutes
         super.onCreate();
         createNotificationChannel();
         startForeground(2, getNotification());
@@ -52,7 +52,7 @@ public class BatteryService extends Service {
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy() { // Restart the service when it is destroyed
         super.onDestroy();
         Log.d("BatteryService", "Service destroyed");
         Intent broadcastIntent = new Intent();
@@ -63,27 +63,27 @@ public class BatteryService extends Service {
 
 
 
-    private void collectBatteryData() {
-        BatteryManager batteryManager = (BatteryManager) getSystemService(Context.BATTERY_SERVICE);
+    private void collectBatteryData() { // Collect battery data and save it in SharedPreferences
+        BatteryManager batteryManager = (BatteryManager) getSystemService(Context.BATTERY_SERVICE); // Get the battery manager
         if (batteryManager == null) {
             return;
         }
 
-        int batteryLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        int batteryLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY); // Get the battery level
         long currentTime = System.currentTimeMillis();
 
         SharedPreferencesManager spManager = SharedPreferencesManager.getInstance();
-        Map<Long, Integer> batteryDataMap = new TreeMap<>(spManager.getBatteryDataMap());
+        Map<Long, Integer> batteryDataMap = new TreeMap<>(spManager.getBatteryDataMap()); // Get the battery data map
 
         // Keep only the data for the last 24 hours
         long oneDayAgo = currentTime - (24 * 60 * 60 * 1000);
-        batteryDataMap.entrySet().removeIf(entry -> entry.getKey() < oneDayAgo);
+        batteryDataMap.entrySet().removeIf(entry -> entry.getKey() < oneDayAgo); // Remove the data points older than 24 hours
 
         batteryDataMap.put(currentTime, batteryLevel); //add the new point to the map
         spManager.saveBatteryDataMap(batteryDataMap); //save the map
     }
 
-    private void createNotificationChannel() {
+    private void createNotificationChannel() { // Create the notification channel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(
                     CHANNEL_ID,
@@ -95,7 +95,7 @@ public class BatteryService extends Service {
         }
     }
 
-    private Notification getNotification() {
+    private Notification getNotification() { // Create the notification
         return new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(getString(R.string.battery_service_title))
                 .setContentText(getString(R.string.battery_service_text))

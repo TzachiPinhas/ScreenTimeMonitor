@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-public class RestartServiceReceiver extends BroadcastReceiver {
+public class RestartServiceReceiver extends BroadcastReceiver { // Restart the service when it is destroyed
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d("RestartServiceReceiver", "Service is being restarted");

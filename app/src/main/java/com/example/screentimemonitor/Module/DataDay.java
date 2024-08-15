@@ -2,7 +2,7 @@ package com.example.screentimemonitor.Module;
 
 import java.util.Map;
 
-public class DataDay {
+public class DataDay { // DataDay class to store the data of a day
 
     String date;
     Map<String, Long> appUsageByNames;

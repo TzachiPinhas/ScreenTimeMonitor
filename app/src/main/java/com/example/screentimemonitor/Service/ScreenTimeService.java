@@ -65,7 +65,7 @@ public class ScreenTimeService extends Service {
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy() { // Restart the service when it is destroyed
         super.onDestroy();
         Log.d(TAG, "Service destroyed");
         Intent broadcastIntent = new Intent();
@@ -75,35 +75,35 @@ public class ScreenTimeService extends Service {
     }
 
 
-    private void collectAndSaveUsageData() {
+    private void collectAndSaveUsageData() { // Collect and save usage data
         String currentDate = getCurrentDate();
         SharedPreferencesManager spManager = SharedPreferencesManager.getInstance();
 
-        if (!currentDate.equals(spManager.getLastCheckedDate())) {
+        if (!currentDate.equals(spManager.getLastCheckedDate())) { // Reset notification flag if it is a new day
             spManager.setNotificationSent(false);
             spManager.setLastCheckedDate(currentDate);
         }
 
 
-        UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
+        UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE); // Get the usage stats manager
         if (usageStatsManager == null) {
             return;
         }
 
-        long endTime = System.currentTimeMillis();
+        long endTime = System.currentTimeMillis(); // Collect data until the current time
         long startTime = getStartOfDayInMillis(); // Collect data from the start of the day
 
-        UsageEvents usageEvents = usageStatsManager.queryEvents(startTime, endTime);
+        UsageEvents usageEvents = usageStatsManager.queryEvents(startTime, endTime); // Get the usage events
         Map<String, Long> usageMap = new HashMap<>();
-        UsageEvents.Event event = new UsageEvents.Event();
+        UsageEvents.Event event = new UsageEvents.Event(); // Create an event object
         Map<String, Long> lastUsedMap = new HashMap<>();
 
-        while (usageEvents.hasNextEvent()) {
+        while (usageEvents.hasNextEvent()) {// Iterate through the events
             usageEvents.getNextEvent(event);
             String packageName = event.getPackageName();
-            if (event.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND) {
+            if (event.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND) { // Check if the event is moving to the foreground
                 lastUsedMap.put(packageName, event.getTimeStamp());
-            } else if (event.getEventType() == UsageEvents.Event.MOVE_TO_BACKGROUND) {
+            } else if (event.getEventType() == UsageEvents.Event.MOVE_TO_BACKGROUND) { // Check if the event is moving to the background
                 Long lastUsedTime = lastUsedMap.get(packageName);
                 if (lastUsedTime != null) {
                     long totalTime = usageMap.getOrDefault(packageName, 0L);
@@ -111,15 +111,15 @@ public class ScreenTimeService extends Service {
                 }
             }
         }
-        long totalUsageTime = 0;
+        long totalUsageTime = 0; // Calculate the total usage time
         for (long usageTime : usageMap.values()) {
             totalUsageTime += usageTime;
         }
 
         // Filter out apps with zero usage time
-        usageMap.entrySet().removeIf(entry -> entry.getValue() <= 0);
+        usageMap.entrySet().removeIf(entry -> entry.getValue() <= 0); // Remove apps with zero usage time
 
-        checkUsageTimeLimit(totalUsageTime);
+        checkUsageTimeLimit(totalUsageTime); // Check if the usage time limit is exceeded
 
         updateDataDays(currentDate, usageMap);
     }
@@ -142,17 +142,17 @@ public class ScreenTimeService extends Service {
         SharedPreferencesManager spManager = SharedPreferencesManager.getInstance();
         List<DataDay> dataDays = spManager.getDataDayList();
 
-        if (!dataDays.isEmpty() && dataDays.get(dataDays.size() - 1).getDate().equals(currentDate)) {
+        if (!dataDays.isEmpty() && dataDays.get(dataDays.size() - 1).getDate().equals(currentDate)) { // Update the usage map for the current day if it exists
             DataDay today = dataDays.get(dataDays.size() - 1);
-            Map<String, Long> appUsageByNames = today.getAppUsageByNames();
+            Map<String, Long> appUsageByNames = today.getAppUsageByNames(); // Get the app usage map for the current day
 
-            for (Map.Entry<String, Long> entry : usageMap.entrySet()) {
+            for (Map.Entry<String, Long> entry : usageMap.entrySet()) { // Update the app usage map with the new values
                 appUsageByNames.put(entry.getKey(), entry.getValue()); // Update with the most recent value
             }
 
             today.setAppUsageByNames(appUsageByNames);
-        } else {
-            if (dataDays.size() == 30) {
+        } else { // Create a new entry for the current day
+            if (dataDays.size() == 30) { // Keep only the data for the last 30 days
                 dataDays.remove(0); // Remove the oldest entry
             }
             dataDays.add(new DataDay(currentDate, usageMap));
@@ -183,7 +183,7 @@ public class ScreenTimeService extends Service {
     }
 
 
-    private void checkUsageTimeLimit(long totalUsageTime) {
+    private void checkUsageTimeLimit(long totalUsageTime) { // Check if the usage time limit is exceeded
         SharedPreferencesManager spManager = SharedPreferencesManager.getInstance();
         int usageTimeLimit = spManager.getUsageTimeLimit(); // Assuming you have a method to get the usage time limit
         if (totalUsageTime > usageTimeLimit * 60 * 1000) { // Convert limit from minutes to milliseconds
@@ -191,7 +191,7 @@ public class ScreenTimeService extends Service {
         }
     }
 
-    private void sendTimeLimitExceededNotification() {
+    private void sendTimeLimitExceededNotification() { // Send a notification when the usage time limit is exceeded
         SharedPreferencesManager spManager = SharedPreferencesManager.getInstance();
         if (!spManager.isNotificationSent()) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
@@ -200,7 +200,7 @@ public class ScreenTimeService extends Service {
                     .setContentText(getString(R.string.time_limit_exceeded_text))
                     .setPriority(NotificationCompat.PRIORITY_HIGH);
 
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE); // Get the notification manager
             if (notificationManager != null) {
                 notificationManager.notify(3, builder.build());
                 spManager.setNotificationSent(true);

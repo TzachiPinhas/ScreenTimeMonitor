@@ -55,14 +55,14 @@ public class BatteryFragment extends Fragment {
     }
 
     private void setupBarChart() {
-        barChart.getDescription().setEnabled(false);
+        barChart.getDescription().setEnabled(false); // Disable the description
 
         XAxis xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setGranularity(1f);
         xAxis.setGranularityEnabled(true);
 
-        YAxis leftAxis = barChart.getAxisLeft();
+        YAxis leftAxis = barChart.getAxisLeft(); // Get the left Y-axis
         leftAxis.setAxisMaximum(100f);
         leftAxis.setAxisMinimum(0f);
         leftAxis.setGranularity(10f);
@@ -83,7 +83,7 @@ public class BatteryFragment extends Fragment {
         legend.setEnabled(false); // Disable the legend
     }
 
-    private void displayCurrentBatteryLevel() {
+    private void displayCurrentBatteryLevel() { // Display the current battery level
         Context context = getContext();
         if (context != null) {
             IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
@@ -97,7 +97,7 @@ public class BatteryFragment extends Fragment {
         }
     }
 
-    private void loadBatteryData() {
+    private void loadBatteryData() { // Load battery data from SharedPreferences
         SharedPreferencesManager spManager = SharedPreferencesManager.getInstance();
         List<Map.Entry<Long, Integer>> batteryData = spManager.getBatteryData();
 
@@ -123,7 +123,7 @@ public class BatteryFragment extends Fragment {
         barDataSet.setColors(colors);
 
         BarData barData = new BarData(barDataSet);
-        barData.setBarWidth(0.9f);
+        barData.setBarWidth(0.9f); // Set the width of the bars
         barData.setDrawValues(false); // Disable values on top of bars
 
         barChart.setData(barData);
