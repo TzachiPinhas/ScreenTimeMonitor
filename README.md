@@ -50,7 +50,7 @@ The ScreenTimeMonitor app is built with a range of modern technologies to ensure
 ## Screenshots
 
 ### Home page
-<img src="https://github.com/user-attachments/assets/c4fc784b-1006-460b-abbe-08c2ae493676" alt="התחברות" width="350" height="700">
+<img src="https://github.com/user-attachments/assets/1a0f21a8-91d4-47f1-9d68-d37b9e7a41b8" alt="התחברות" width="350" height="700">
 
 ### Battery page
 <img src="https://github.com/user-attachments/assets/7f771c0c-2d44-45c7-9b7b-3d6535ca2cc9" alt="הרשמהה" width="350" height="700">
@@ -63,6 +63,7 @@ The ScreenTimeMonitor app is built with a range of modern technologies to ensure
 Contributions are welcome! Please fork this repository and submit a pull request for any enhancements or bug fixes.
 
 
+![image](https://github.com/user-attachments/assets/1a0f21a8-91d4-47f1-9d68-d37b9e7a41b8)
 
 
 
